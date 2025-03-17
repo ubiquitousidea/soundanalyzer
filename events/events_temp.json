@@ -1,0 +1,198 @@
+[
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:02.3039",
+        "t2": "1970-01-01 00:00:08.7932",
+        "label": "Fmaj7",
+        "uuid": "6c248687-d425-4bb5-aeac-d02081d6d47a"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:09.2924",
+        "t2": "1970-01-01 00:00:15.6282",
+        "label": "Gm7",
+        "uuid": "1f39c391-78c9-4ebc-9664-3f7e687d4a89"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:16.2041",
+        "t2": "1970-01-01 00:00:22.9238",
+        "label": "Am7",
+        "uuid": "d37a6672-fff5-4563-961c-4fed798924af"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:22.9238",
+        "t2": "1970-01-01 00:00:29.3364",
+        "label": "Bbmaj7",
+        "uuid": "ca3e6a69-f831-4794-9d35-c7e6cd945eda"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:29.7204",
+        "t2": "1970-01-01 00:00:36.0945",
+        "label": "C7",
+        "uuid": "a420adb8-7e45-44a0-bc32-d018e512dbf4"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:36.0561",
+        "t2": "1970-01-01 00:00:43.9278",
+        "label": "Dm7",
+        "uuid": "fb4af83c-d399-4452-b352-ecc56a50c7c5"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:44.5806",
+        "t2": "1970-01-01 00:00:51.3003",
+        "label": "Em7b5",
+        "uuid": "79cb748b-e968-4560-8412-38e9b9eaa978"
+    },
+    {
+        "filename": "soudns/f_diatonic_sevenths.wav",
+        "t1": "1970-01-01 00:00:51.4155",
+        "t2": "1970-01-01 00:00:57.3288",
+        "label": "Fmaj7",
+        "uuid": "d46b045d-b51c-4796-aff7-f13ddde7b4d7"
+    },
+    {
+        "filename": "soudns/g-g#-a-major-scales-with-mistakes.wav",
+        "t1": "1970-01-01 00:00:00.7065",
+        "t2": "1970-01-01 00:00:00.8821",
+        "label": "G",
+        "uuid": "500320e7-0a25-4437-913d-f10e88ebb376"
+    },
+    {
+        "filename": "soudns/g-g#-a-major-scales-with-mistakes.wav",
+        "t1": "1970-01-01 00:00:00.8913",
+        "t2": "1970-01-01 00:00:01.0708",
+        "label": "A",
+        "uuid": "9503eab5-4292-4d44-8f98-068f84f8c4ba"
+    },
+    {
+        "filename": "soudns/g-g#-a-major-scales-with-mistakes.wav",
+        "t1": "1970-01-01 00:00:01.0858",
+        "t2": "1970-01-01 00:00:01.4024",
+        "label": "B",
+        "uuid": "426c0796-bd04-48d3-9727-a96c50283f3f"
+    },
+    {
+        "filename": "soudns/g-g#-a-major-scales-with-mistakes.wav",
+        "t1": "1970-01-01 00:00:01.787",
+        "t2": "1970-01-01 00:00:02.3953",
+        "label": "A",
+        "uuid": "2c5740b1-abc6-4900-a50e-6377e06a2958"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:01.2086",
+        "t2": "1970-01-01 00:00:01.423",
+        "label": "G",
+        "uuid": "339c99d0-9b57-4d34-b51a-e3e70a0fcb18"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:01.423",
+        "t2": "1970-01-01 00:00:01.6569",
+        "label": "A",
+        "uuid": "18602975-ce1d-4572-8105-9685e9ac5c81"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:01.6581",
+        "t2": "1970-01-01 00:00:01.8705",
+        "label": "B",
+        "uuid": "14b4c5f3-9c6a-4fb3-9aff-1048493a608d"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:01.8638",
+        "t2": "1970-01-01 00:00:02.0628",
+        "label": "C",
+        "uuid": "a975bf94-5ab7-4591-910e-3c3b44383408"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:02.1026",
+        "t2": "1970-01-01 00:00:02.3281",
+        "label": "D",
+        "uuid": "b2c34611-6581-40d4-acde-1a7918326c51"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:02.62",
+        "t2": "1970-01-01 00:00:02.8521",
+        "label": "E",
+        "uuid": "8e527ee5-62d3-41bc-9e81-9f014e06b1c9"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:02.8654",
+        "t2": "1970-01-01 00:00:03.071",
+        "label": "F#",
+        "uuid": "82cc9943-8be3-42c3-8913-5ae4ea1605f4"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:03.0777",
+        "t2": "1970-01-01 00:00:03.2833",
+        "label": "G",
+        "uuid": "fe4292d2-c8e4-4dc0-852c-69f2376fdd7e"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:03.2965",
+        "t2": "1970-01-01 00:00:03.5486",
+        "label": "A",
+        "uuid": "23c46add-8063-4572-90a3-29a8ea65c549"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:03.5353",
+        "t2": "1970-01-01 00:00:03.7807",
+        "label": "B",
+        "uuid": "c4840314-1d83-4ca6-84d3-f40f7f4c4b87"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:03.7608",
+        "t2": "1970-01-01 00:00:03.9996",
+        "label": "C",
+        "uuid": "3885e1d1-3ab2-4665-a626-648d66ef45bc"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:04.0262",
+        "t2": "1970-01-01 00:00:04.2517",
+        "label": "D",
+        "uuid": "bce86dbd-e3ac-42a3-9109-8d5491f104e5"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:04.2716",
+        "t2": "1970-01-01 00:00:04.5236",
+        "label": "E",
+        "uuid": "c998b176-cee8-403e-96f3-c7c6980211fe"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:04.5303",
+        "t2": "1970-01-01 00:00:04.7823",
+        "label": "F#",
+        "uuid": "0554d582-86d4-4b88-a883-92542f2ec542"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:04.7691",
+        "t2": "1970-01-01 00:00:05.0145",
+        "label": "G",
+        "uuid": "54b21540-b622-4452-abb6-6cb7f14d3900"
+    },
+    {
+        "filename": "soudns/gmajor-scale-2octave-up-down-up-down.wav",
+        "t1": "1970-01-01 00:00:05.0235",
+        "t2": "1970-01-01 00:00:05.2058",
+        "label": "F#",
+        "uuid": "b73dad6f-9675-4b02-8301-df820990acb8"
+    }
+]
