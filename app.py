@@ -162,12 +162,14 @@ def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data):
     Input('playsound', 'n_clicks'),
     Input('graph1', 'clickData'),
     Input('clustertable', 'selected_rows'),
+    Input('event_table', 'selected_rows'),
     State('soundprocess', 'data'),
     State('graph1', 'selectedData'),
     State('graphtype', 'data'),
     State('clustertable', 'data'),
+    State('event_table','data')
 )
-def play_sound(n, cd, sel_rows, sp_data, graph_selection, gt, clustertable):
+def play_sound(n, cd, sel_rows, sel_rows2, sp_data, graph_selection, gt, clustertable, event_table):
     try:
         sp=pickle.loads(sp_data)
         assert isinstance(sp, SoundProcess)
@@ -176,6 +178,8 @@ def play_sound(n, cd, sel_rows, sp_data, graph_selection, gt, clustertable):
     caller = dash.callback_context.triggered_id
     if caller == 'clustertable':
         sp.play_selection(selected_row=clustertable[sel_rows[0]])
+    elif  caller == 'event_table':
+        sp.play_selection(selected_row=event_table[sel_rows2[0]])
     elif gt == 'timeseries':
         sp.play_selection(dash_selection=graph_selection)
     elif gt == 'spectra':
@@ -267,8 +271,8 @@ def show_events(events, path):
     table_data = [
         {
             'label': item['label'],
-            't1': f"{float(item['t1']):1.3f}", 
-            't2': f"{float(item['t2']):1.3f}",
+            'ts_min': f"{float(item['t1']):1.3f}", 
+            'ts_max': f"{float(item['t2']):1.3f}",
             'duration': f"{float(item['t2']) - float(item['t1']):1.3f}"
         } 
         for item in events 

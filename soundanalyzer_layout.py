@@ -113,9 +113,9 @@ DATA_LABELING = dbc.AccordionItem([
     ]),
     dbc.Row([DataTable(id='event_table', columns=[
         {'name': 'Label', 'id': 'label'},
-        {'name': 'Start', 'id': 't1'},
+        {'name': 'Start', 'id': 'ts_min'},
         {'name': 'Duration (s)', 'id': 'duration'}
-    ])])
+    ], row_selectable='single')])
 ], title='Data Labeling...')
 
 
