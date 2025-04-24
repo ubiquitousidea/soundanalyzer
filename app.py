@@ -206,6 +206,34 @@ def build_the_classifier_model(n, events, sp_data):
     m.fit()
     return Serverside(cloudpickle.dumps(m))
 
+@callback(
+    Output('event_chooser_table', 'data'),
+    Output('chooseevents_modal', 'is_open'),
+    Input('chooseevents', 'n_clicks'),
+    State('events', 'data'),
+    State('soundprocess', 'data'),
+    State('path', 'data')
+)
+def fill_event_chooser_table(n, events, sp_data, path):
+    if not events or not sp_data:
+        raise PreventUpdate
+    sp = pickle.loads(sp_data)
+    clusters = pd.DataFrame(sp.cluster_table)
+    events = pd.DataFrame(events)
+    events = events[events.filename.eq(path)]
+    events = events.assign(
+        duration=lambda x: (x.t2.astype(float) - x.t1.astype(float)).apply(lambda x: f"{x:1.3f}"),
+        ts_min=lambda x: x.t1.apply(lambda x: f"{x:1.3f}"),
+        ts_max=lambda x: x.t2.apply(lambda x: f"{x:1.3f}")
+    )
+    clusters = clusters.assign(
+        duration=clusters.dt_,
+        label=clusters.cluster_
+    )
+    table_data = pd.concat([events, clusters], axis=0)
+    return table_data.to_dict('records'), True
+
+
 # - Save classifier model to file 
 
 @callback(
@@ -340,4 +368,4 @@ def show_console_data(cd, sd, rows, gt):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)

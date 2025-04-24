@@ -50,6 +50,12 @@ PC_INPUTS = [
     ]) for i, x in enumerate(('x', 'y', 'z'))
 ]
 
+EVENT_COLUMNS = [
+    {'name': 'Label', 'id': 'label'},
+    {'name': 'Start', 'id': 'ts_min'},
+    {'name': 'Duration (s)', 'id': 'duration'}
+]
+
 # - nav items -
 
 LOAD_SOUND = dbc.AccordionItem([
@@ -111,11 +117,7 @@ DATA_LABELING = dbc.AccordionItem([
         dbc.Button('Store Event',id='store_event'),
         dbc.Button('Show Events', id='showevents')
     ]),
-    dbc.Row([DataTable(id='event_table', columns=[
-        {'name': 'Label', 'id': 'label'},
-        {'name': 'Start', 'id': 'ts_min'},
-        {'name': 'Duration (s)', 'id': 'duration'}
-    ], row_selectable='single')])
+    dbc.Row([DataTable(id='event_table', columns=EVENT_COLUMNS, row_selectable='single')])
 ], title='Data Labeling...')
 
 
@@ -169,7 +171,7 @@ CLUSTERING = dbc.AccordionItem([
 
 
 FIT_CLASSIFIER = dbc.AccordionItem([
-    dbc.Button('Fit Classifier', id='fitclassifier'),
+    dbc.Button('Choose Events', id='chooseevents'),
     dbc.Button('View Feature Importance', id='view_feature_importance', disabled=True),
     dbc.Button('Save Classifier', id='savemodel', disabled=True),
     dbc.Button('Show Predictions', id='showprediction', disabled=True),
@@ -213,6 +215,16 @@ ANALYZER_LAYOUT = dbc.Container([
         id='console', is_open=False,
         style={"position": "fixed", "bottom": 20, "right": 20, "width": 400, 'max-height': 600, 'overflow-y': 'auto'}
     ),
+    dbc.Modal([
+        dbc.ModalHeader([html.H2('Choose Training Data')]),
+        dbc.ModalBody([
+            html.P('Choose events for model training data'),
+            DataTable(id='event_chooser_table', row_selectable='multi', columns=EVENT_COLUMNS)
+        ]),
+        dbc.ModalFooter(
+            dbc.Button('Fit Classifier', id='fitclassifier')
+        )
+    ], id='chooseevents_modal', is_open=False),
     dcc.Store(id='soundprocess'),
     dcc.Store(id='path'),
     dcc.Store(id='events', data=[]),
