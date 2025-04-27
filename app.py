@@ -163,13 +163,16 @@ def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data):
     Input('graph1', 'clickData'),
     Input('clustertable', 'selected_rows'),
     Input('event_table', 'selected_rows'),
+    Input('event_chooser_table', 'selected_cell'),
     State('soundprocess', 'data'),
     State('graph1', 'selectedData'),
     State('graphtype', 'data'),
     State('clustertable', 'data'),
-    State('event_table','data')
+    State('event_table','data'),
+    State('event_chooser_table', 'data')
 )
-def play_sound(n, cd, sel_rows, sel_rows2, sp_data, graph_selection, gt, clustertable, event_table):
+def play_sound(n, cd, sel_rows, sel_rows2, sel_rows3, sp_data, 
+               graph_selection, gt, clustertable, event_table, ec_table):
     try:
         sp=pickle.loads(sp_data)
         assert isinstance(sp, SoundProcess)
@@ -180,6 +183,8 @@ def play_sound(n, cd, sel_rows, sel_rows2, sp_data, graph_selection, gt, cluster
         sp.play_selection(selected_row=clustertable[sel_rows[0]])
     elif  caller == 'event_table':
         sp.play_selection(selected_row=event_table[sel_rows2[0]])
+    elif caller == 'event_chooser_table':
+        sp.play_selection(selected_row=ec_table[sel_rows3[0]])
     elif gt == 'timeseries':
         sp.play_selection(dash_selection=graph_selection)
     elif gt == 'spectra':
@@ -344,9 +349,10 @@ def fill_cluster_table(sp_data):
     Input('graph1', 'clickData'),
     Input('graph1', 'selectedData'),
     Input('clustertable', 'selected_rows'),
+    Input('event_chooser_table', 'selected_cell'),
     State('graphtype', 'data')
 )
-def show_console_data(cd, sd, rows, gt):
+def show_console_data(cd, sd, rows, cell, gt):
     propids = dash.callback_context.triggered_prop_ids
     try:
         caller = list(propids.keys())[0]
@@ -359,6 +365,8 @@ def show_console_data(cd, sd, rows, gt):
             data = json.dumps(sd, indent=4)
         case 'clustertable.selected_rows':
             data = json.dumps(rows, indent=4)
+        case 'event_chooser_table.selected_cell':
+            data = json.dumps(cell, indent=4)
         case _:
             raise PreventUpdate
     if data == 'null':
