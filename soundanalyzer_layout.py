@@ -4,6 +4,7 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import dcc, html
 from dash.dash_table import DataTable
+from dash_ag_grid import AgGrid
 
 # --- Sound directory and wav files ---
 
@@ -219,12 +220,24 @@ ANALYZER_LAYOUT = dbc.Container([
         dbc.ModalHeader([html.H2('Choose Training Data')]),
         dbc.ModalBody([
             html.P('Choose events for model training data'),
-            DataTable(id='event_chooser_table', row_selectable='multi', columns=EVENT_COLUMNS)
+            # DataTable(id='event_chooser_table', row_selectable='multi', columns=EVENT_COLUMNS)
+            AgGrid(
+                id='event_chooser_table',
+                rowData=None,
+                columnDefs=[
+                    {'headerName': 'Label', 'field': 'label'},
+                    {'headerName': 'Start', 'field': 'ts_min'},
+                    {'headerName': 'Duration (s)', 'field': 'duration'}
+                ],
+                style={"height": '80vh', "width": '100%'},
+                dashGridOptions={'pagination':True},
+                columnSize="sizeToFit"
+            )
         ]),
         dbc.ModalFooter(
             dbc.Button('Fit Classifier', id='fitclassifier')
         )
-    ], id='chooseevents_modal', is_open=False),
+    ], id='chooseevents_modal', size='l', is_open=False),
     dcc.Store(id='soundprocess'),
     dcc.Store(id='path'),
     dcc.Store(id='events', data=[]),

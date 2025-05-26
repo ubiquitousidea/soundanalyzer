@@ -163,15 +163,15 @@ def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data):
     Input('graph1', 'clickData'),
     Input('clustertable', 'selected_rows'),
     Input('event_table', 'selected_rows'),
-    Input('event_chooser_table', 'selected_cell'),
+    Input('event_chooser_table', 'cellClicked'),
     State('soundprocess', 'data'),
     State('graph1', 'selectedData'),
     State('graphtype', 'data'),
     State('clustertable', 'data'),
     State('event_table','data'),
-    State('event_chooser_table', 'data')
+    State('event_chooser_table', 'rowData')
 )
-def play_sound(n, cd, sel_rows, sel_rows2, sel_rows3, sp_data, 
+def play_sound(n, cd, sel_rows, sel_rows2, cell, sp_data, 
                graph_selection, gt, clustertable, event_table, ec_table):
     try:
         sp=pickle.loads(sp_data)
@@ -184,7 +184,7 @@ def play_sound(n, cd, sel_rows, sel_rows2, sel_rows3, sp_data,
     elif  caller == 'event_table':
         sp.play_selection(selected_row=event_table[sel_rows2[0]])
     elif caller == 'event_chooser_table':
-        sp.play_selection(selected_row=ec_table[sel_rows3[0]])
+        sp.play_selection(selected_row=ec_table[cell['rowIndex']])
     elif gt == 'timeseries':
         sp.play_selection(dash_selection=graph_selection)
     elif gt == 'spectra':
@@ -212,7 +212,7 @@ def build_the_classifier_model(n, events, sp_data):
     return Serverside(cloudpickle.dumps(m))
 
 @callback(
-    Output('event_chooser_table', 'data'),
+    Output('event_chooser_table', 'rowData'),
     Output('chooseevents_modal', 'is_open'),
     Input('chooseevents', 'n_clicks'),
     State('events', 'data'),
@@ -349,7 +349,7 @@ def fill_cluster_table(sp_data):
     Input('graph1', 'clickData'),
     Input('graph1', 'selectedData'),
     Input('clustertable', 'selected_rows'),
-    Input('event_chooser_table', 'selected_cell'),
+    Input('event_chooser_table', 'cellClicked'),
     State('graphtype', 'data')
 )
 def show_console_data(cd, sd, rows, cell, gt):
@@ -365,7 +365,7 @@ def show_console_data(cd, sd, rows, cell, gt):
             data = json.dumps(sd, indent=4)
         case 'clustertable.selected_rows':
             data = json.dumps(rows, indent=4)
-        case 'event_chooser_table.selected_cell':
+        case 'event_chooser_table.cellClicked':
             data = json.dumps(cell, indent=4)
         case _:
             raise PreventUpdate
@@ -376,4 +376,4 @@ def show_console_data(cd, sd, rows, cell, gt):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
