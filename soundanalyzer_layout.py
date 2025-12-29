@@ -128,6 +128,14 @@ DIMENSION_REDUCTION = dbc.AccordionItem([
         dbc.Input(type="number", value=16, min=1, max=30, step=1, id='npc')
     ]),
     dbc.Row([
+        html.H4('Component Number'),
+        dcc.Dropdown(
+            options=[{'label': f'PC {i + 1}', 'value': i} for i in range(16)],
+            value=1,
+            id='component_number'
+        )
+    ]),
+    dbc.Row([
         dbc.Col([
             dbc.Button('Run PCA...', id='runpca')
         ]),
@@ -220,7 +228,6 @@ ANALYZER_LAYOUT = dbc.Container([
         dbc.ModalHeader([html.H2('Choose Training Data')]),
         dbc.ModalBody([
             html.P('Choose events for model training data'),
-            # DataTable(id='event_chooser_table', row_selectable='multi', columns=EVENT_COLUMNS)
             AgGrid(
                 id='event_chooser_table',
                 rowData=None,
@@ -229,9 +236,9 @@ ANALYZER_LAYOUT = dbc.Container([
                     {'headerName': 'Start', 'field': 'ts_min'},
                     {'headerName': 'Duration (s)', 'field': 'duration'}
                 ],
-                style={"height": '80vh', "width": '100%'},
-                dashGridOptions={'pagination':True},
-                columnSize="sizeToFit"
+                style={"height": '70vh', "width": '100%'},
+                columnSize="sizeToFit",
+                dashGridOptions={"rowSelection": 'multiple'}
             )
         ]),
         dbc.ModalFooter(

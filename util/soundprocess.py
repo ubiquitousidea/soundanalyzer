@@ -17,10 +17,9 @@ from sklearn.decomposition import PCA
 
 class SoundProcess(object):
     
-    EPOCH = pd.Timestamp('1970-01-01T00:00:00+0000')
     PC_SMOOTH_HALFLIFE = 4
     CLUSTER_SMOOTH_HALFLIFE = 4
-    FUCKER = .000001
+    OFFSET = .000001
     
     def __init__(self, sound, fs, path=None):
         """
@@ -92,7 +91,7 @@ class SoundProcess(object):
             study of human ear ability to detect phase. 
         np.log() is used to equalize noise variance that occurs over many orders of magnitude
         """
-        return np.log(np.abs(self.fft) + self.FUCKER)
+        return np.log(np.abs(self.fft) + self.OFFSET)
 
     @property
     def sound_times(self):
@@ -409,7 +408,7 @@ class SoundProcess(object):
 
     def play_principal_spectrum(self, i):
         b = self.pc_model.inverse_transform(np.eye(self.npc))[i, :]
-        c = np.array(np.exp(b) - self.FUCKER, ndmin=2)
+        c = np.array(np.exp(b) - self.OFFSET, ndmin=2)
         c = np.concat([c] * 100, axis=0)
         data = self.stft.istft(c.T)
         self.playsound(data)

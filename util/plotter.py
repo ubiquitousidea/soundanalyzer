@@ -153,7 +153,7 @@ class SoundProcessPlotter(object):
             laballer = lambda x: f"{np.exp(x):1.2f}"
         else:
             x = self.sp.stft.f
-            spectra = np.exp(b) - self.sp.FUCKER
+            spectra = np.exp(b) - self.sp.OFFSET
             SF = 2
             laballer = lambda x: f"{x:1.3f}"
         

@@ -72,7 +72,9 @@ app.layout = ANALYZER_LAYOUT
 def main_action(
     n1, n2, n3, n4, path, sp_data, window, hop, 
     nclust, pc1, npc, maxseconds, whiten, sr, scalingmethod):
-    
+    """
+    Load sound, run FFT, run PCA, run clustering
+    """
     if not any([n1, n2, n3, n4]):
         raise PreventUpdate
     _id = dash.callback_context.triggered_id
@@ -111,9 +113,10 @@ def main_action(
     Input('showcomponents', 'n_clicks'),
     Input('matrix', 'n_clicks'),
     Input('pc_ts', 'n_clicks'),
-    State('classifiermodel', 'data')
+    State('classifiermodel', 'data'),
+    State('component_number', 'value')
 )
-def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data):
+def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data, component_number):
     try:
         sp = pickle.loads(sp_data)
         plotter = SoundProcessPlotter(sp)
@@ -128,7 +131,7 @@ def make_graph(sp_data, n1, n2, n3, n4, n5, n6, n7, model_data):
     
     match caller:
         case 'plot3d':
-            fig = plotter.plot_pca_3d(1, 2, 3)
+            fig = plotter.plot_pca_3d(component_number, component_number + 1, component_number + 2)
             graphtype = '3d'
             fig.update_scenes(**FIGURE_3D_AXIS_INVISIBLE)
         case 'plotspectrogram':
@@ -196,7 +199,7 @@ def play_sound(n, cd, sel_rows, sel_rows2, cell, sp_data,
 @callback(
     Output('classifiermodel', 'data'),
     Input('fitclassifier', 'n_clicks'),
-    State('events', 'data'),
+    State('event_chooser_table', 'rowData'),
     State('soundprocess', 'data')
 )
 def build_the_classifier_model(n, events, sp_data):
@@ -274,8 +277,10 @@ def store_event(n, n2, path, selection, data, label):
         try:
             with open('../events_temp.json', 'r') as f:
                 data = json.load(f)
+            print('loaded temp events dot json')
             return data
-        except:
+        except Exception as e:
+            print(f'did not load event json {e}')
             raise PreventUpdate
     try:
         # then try to add event from range selection
