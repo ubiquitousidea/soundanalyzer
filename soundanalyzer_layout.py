@@ -194,11 +194,18 @@ ANALYZER_LAYOUT = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.H1('Sound Analyzer')
-        ]),
+        ], width=6),
         dbc.Col([
             dbc.Button('Play Selection...', id='playsound'),
             dcc.Store(id='abc123')
-        ])
+        ], width=3),
+        dbc.Col([
+            dbc.Checklist(
+                id='showconsole', 
+                options=[{'label': 'Show Console', 'value': 'True'}], 
+                value=['True']
+            )
+        ], width=3)
     ]),
     dbc.Row([
         dbc.Col([
@@ -232,7 +239,7 @@ ANALYZER_LAYOUT = dbc.Container([
                 id='event_chooser_table',
                 rowData=None,
                 columnDefs=[
-                    {'headerName': 'Label', 'field': 'label'},
+                    {'headerName': 'Label', 'field': 'label', "checkboxSelection": True, "headerCheckboxSelection": True},
                     {'headerName': 'Start', 'field': 'ts_min'},
                     {'headerName': 'Duration (s)', 'field': 'duration'}
                 ],
@@ -241,9 +248,10 @@ ANALYZER_LAYOUT = dbc.Container([
                 dashGridOptions={"rowSelection": 'multiple'}
             )
         ]),
-        dbc.ModalFooter(
+        dbc.ModalFooter([
+            dbc.Button('Remove Event', id='remove_event'),
             dbc.Button('Fit Classifier', id='fitclassifier')
-        )
+        ])
     ], id='chooseevents_modal', size='l', is_open=False),
     dcc.Store(id='soundprocess'),
     dcc.Store(id='path'),
