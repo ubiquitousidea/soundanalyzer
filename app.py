@@ -199,7 +199,7 @@ def play_sound(n, cd, sel_rows, sel_rows2, cell, sp_data,
 @callback(
     Output('classifiermodel', 'data'),
     Input('fitclassifier', 'n_clicks'),
-    State('event_chooser_table', 'rowData'),
+    State('event_chooser_table', 'selectedRows'),
     State('soundprocess', 'data')
 )
 def build_the_classifier_model(n, events, sp_data):
@@ -266,12 +266,15 @@ def save_model_and_fill_model_table(n, path, classifier):
     Output('events', 'data'),
     Input('store_event', 'n_clicks'),
     Input('showevents', 'n_clicks'),
+    Input('remove_event', 'n_clicks'),
     State('path', 'data'),
     State('graph1', 'selectedData'),
     State('events', 'data'),
-    State('label', 'value')
+    State('label', 'value'),
+    State('event_chooser_table', 'selectedRows')
 )
-def store_event(n, n2, path, selection, data, label):
+def store_event(n, n2, n3, path, selection, data, label, event_to_remove):
+    caller = dash.callback_context.triggered_id
     if not n:
         # on start up, attempt to load stored events
         try:
@@ -284,15 +287,18 @@ def store_event(n, n2, path, selection, data, label):
             raise PreventUpdate
     try:
         # then try to add event from range selection
-        s = selection['range']['x']
-        new_event = dict(
-            filename=path,
-            t1=s[0],
-            t2=s[1],
+        if caller == 'store_event':
+            s = selection['range']['x']
+            new_event = dict(
+                filename=path,
+                t1=s[0],
+                t2=s[1],
             label=label,
             uuid=str(uuid4())
         )
-        data.append(new_event)
+            data.append(new_event)
+        elif caller == 'remove_event':
+            data = [item for item in data if item['uuid'] != event_to_remove]
     except:
         pass
     # data is returned, possibly modified
@@ -355,25 +361,28 @@ def fill_cluster_table(sp_data):
     Input('graph1', 'selectedData'),
     Input('clustertable', 'selected_rows'),
     Input('event_chooser_table', 'cellClicked'),
-    State('graphtype', 'data')
+    Input('showconsole', 'value'),
 )
-def show_console_data(cd, sd, rows, cell, gt):
+def show_console_data(cd, sd, rows, cell, showconsole):
     propids = dash.callback_context.triggered_prop_ids
     try:
         caller = list(propids.keys())[0]
     except:
         raise PreventUpdate
-    match caller:
-        case 'graph1.clickData':
-            data = json.dumps(cd, indent=4)
-        case 'graph1.selectedData':
-            data = json.dumps(sd, indent=4)
-        case 'clustertable.selected_rows':
-            data = json.dumps(rows, indent=4)
-        case 'event_chooser_table.cellClicked':
-            data = json.dumps(cell, indent=4)
-        case _:
-            raise PreventUpdate
+    if 'True' not in showconsole:
+        return '', False
+    else:
+        match caller:
+            case 'graph1.clickData':
+                data = json.dumps(cd, indent=4)
+            case 'graph1.selectedData':
+                data = json.dumps(sd, indent=4)
+            case 'clustertable.selected_rows':
+                data = json.dumps(rows, indent=4)
+            case 'event_chooser_table.cellClicked':
+                data = json.dumps(cell, indent=4)
+            case _:
+                raise PreventUpdate
     if data == 'null':
         raise PreventUpdate
     output = html.Pre(data)

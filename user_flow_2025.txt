@@ -1,0 +1,2 @@
+#
+currently the layout has two tables for events. they are 'event_table' and 'event_chooser_table'.

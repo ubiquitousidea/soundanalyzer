@@ -1,0 +1,4 @@
+The data available at the url below contains historical Github pull-request data for a popular open source repository. It may take a few minutes for the download to complete, so make sure you have a way to cache the data.
+The maintainers are serious about getting eyes on a pull-request very soon after it is made. They are looking for a way to determine the number of reviewers that should be available at any time during the week.
+Using the downloaded data, build a predictive model which will help the maintainers staff shifts of reviewers throughout the week.
+Communicate the accuracy of this model in the best way you see fit.
