@@ -184,7 +184,7 @@ def play_sound(n, cd, sel_rows, sel_rows2, cell, sp_data,
     caller = dash.callback_context.triggered_id
     if caller == 'clustertable':
         sp.play_selection(selected_row=clustertable[sel_rows[0]])
-    elif  caller == 'event_table':
+    elif caller == 'event_table':
         sp.play_selection(selected_row=event_table[sel_rows2[0]])
     elif caller == 'event_chooser_table':
         sp.play_selection(selected_row=ec_table[cell['rowIndex']])
@@ -226,7 +226,6 @@ def fill_event_chooser_table(n, events, sp_data, path):
     if not events or not sp_data:
         raise PreventUpdate
     sp = pickle.loads(sp_data)
-    clusters = pd.DataFrame(sp.cluster_table)
     events = pd.DataFrame(events)
     events = events[events.filename.eq(path)]
     events = events.assign(
@@ -234,38 +233,43 @@ def fill_event_chooser_table(n, events, sp_data, path):
         ts_min=lambda x: x.t1.apply(lambda x: f"{x:1.3f}"),
         ts_max=lambda x: x.t2.apply(lambda x: f"{x:1.3f}")
     )
-    clusters = clusters.assign(
-        duration=clusters.dt_,
-        label=clusters.cluster_
-    )
-    table_data = pd.concat([events, clusters], axis=0)
+    
+    try:
+        clusters = pd.DataFrame(sp.cluster_table)
+        clusters = clusters.assign(
+            duration=clusters.dt_,
+            label=clusters.cluster_
+        )
+        table_data = pd.concat([events, clusters], axis=0)
+    except:
+        table_data = events
+
     return table_data.to_dict('records'), True
 
 
 # - Save classifier model to file 
 
 @callback(
-    Output('modeltable', 'data'),
-    Output('modeltable', 'columns'),
+    Output('model_index', 'data'),
     Input('savemodel', 'n_clicks'),
-    State('path', 'data'),
-    State('classifiermodel', 'data')
+    State('classifiermodel', 'data'),
+    State('path', 'data')
 )
-def save_model_and_fill_model_table(n, path, classifier):
+def save_model(n, classifier, path):
     try:
         m = pickle.loads(classifier)
     except:
         raise PreventUpdate
     name = os.path.split(path)[-1].replace('.wav', '')
     m.save_binary(f'models/classifier/{name}.bin')
-    return [{'name': name} for name in os.listdir('models/classifier')], [{'name': 'Filename', 'id': 'name'}]
-    
+    return 1
+
 # - store event data from selection - 
 
 @callback(
     Output('events', 'data'),
+    Input('load_events', 'n_clicks'),
     Input('store_event', 'n_clicks'),
-    Input('showevents', 'n_clicks'),
     Input('remove_event', 'n_clicks'),
     State('path', 'data'),
     State('graph1', 'selectedData'),
@@ -275,13 +279,14 @@ def save_model_and_fill_model_table(n, path, classifier):
 )
 def store_event(n, n2, n3, path, selection, data, label, event_to_remove):
     caller = dash.callback_context.triggered_id
-    if not n:
+    print(caller)
+    if caller == 'load_events':
         # on start up, attempt to load stored events
         try:
             with open('../events_temp.json', 'r') as f:
                 data = json.load(f)
-            print('loaded temp events dot json')
-            return data
+            print(f'loaded {len(data)} temp events dot json')
+            
         except Exception as e:
             print(f'did not load event json {e}')
             raise PreventUpdate
@@ -302,6 +307,11 @@ def store_event(n, n2, n3, path, selection, data, label, event_to_remove):
     except:
         pass
     # data is returned, possibly modified
+    print(len(data))
+    if len(data) > 0: 
+        with open('../events_temp.json', 'w') as f:
+            json.dump(data, f)
+        print(f"wrote {len(data)} events to temp json")
     return data
 
 # - show events in the event table - 
@@ -322,8 +332,8 @@ def show_events(events, path):
         for item in events 
         if item['filename'] == path
     ]
-    with open('../events_temp.json', 'w') as f:
-        json.dump(events, f, indent=4)
+    # with open('../events_temp.json', 'w') as f:
+    #     json.dump(events, f, indent=4)
     return table_data
 
 
@@ -387,6 +397,30 @@ def show_console_data(cd, sd, rows, cell, showconsole):
         raise PreventUpdate
     output = html.Pre(data)
     return output, True
+
+
+@callback(
+    Output('model_selector_table', 'rowData'),
+    Input('classifiermodel', 'data')
+)
+def update_models_table(model_data):
+    if not model_data:
+        raise PreventUpdate
+    try:
+        model = pickle.loads(model_data)
+    except:
+        raise PreventUpdate
+    
+    # Extract properties
+    data = [{
+        'Kind': model.kind,
+        'Num Features': len(model.feature_names) if model.feature_names is not None else 0,
+        'Num Samples': len(model.ts) if model.ts is not None else 0,
+        'Labels': ", ".join([str(l) for l in model.unique_labels]),
+        'Classifier Type': type(model).__name__
+    }]
+    
+    return data
 
 
 if __name__ == '__main__':

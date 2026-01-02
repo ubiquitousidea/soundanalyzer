@@ -115,8 +115,8 @@ DATA_LABELING = dbc.AccordionItem([
         dbc.Input(placeholder='Data Label', id='label')
     ]),
     dbc.Row([
-        dbc.Button('Store Event',id='store_event'),
-        dbc.Button('Show Events', id='showevents')
+        dbc.Button('Load Events', id='load_events', color='primary'),
+        dbc.Button('Store Event', id='store_event')
     ]),
     dbc.Row([DataTable(id='event_table', columns=EVENT_COLUMNS, row_selectable='single')])
 ], title='Data Labeling...')
@@ -180,13 +180,59 @@ CLUSTERING = dbc.AccordionItem([
 
 
 FIT_CLASSIFIER = dbc.AccordionItem([
-    dbc.Button('Choose Events', id='chooseevents'),
+    dbc.Button('Start Modeling', id='chooseevents'),
     dbc.Button('View Feature Importance', id='view_feature_importance', disabled=True),
-    dbc.Button('Save Classifier', id='savemodel', disabled=True),
+
     dbc.Button('Show Predictions', id='showprediction', disabled=True),
-    DataTable(id='modeltable')
+
 ], title='Classification Modeling')
 
+MODAL_CHOOSE_EVENTS = dbc.Modal([
+    dbc.ModalHeader([html.H2('Choose Training Data')]),
+    dbc.ModalBody([
+        html.P('Choose events for model training data'),
+        AgGrid(
+            id='event_chooser_table',
+            rowData=None,
+            columnDefs=[
+                {'headerName': 'Label', 'field': 'label', "checkboxSelection": True, "headerCheckboxSelection": True},
+                {'headerName': 'Start', 'field': 'ts_min'},
+                {'headerName': 'Duration (s)', 'field': 'duration'}
+            ],
+            style={"height": '30vh', "width": '100%'},
+            columnSize="sizeToFit",
+            dashGridOptions={"rowSelection": 'multiple'}
+        ),
+        AgGrid(
+            id='model_selector_table',
+            rowData=None,
+            columnDefs=[
+                {'headerName': 'Kind', 'field': 'Kind'},
+                {'headerName': 'Features', 'field': 'Num Features'},
+                {'headerName': 'Samples', 'field': 'Num Samples'},
+                {'headerName': 'Labels', 'field': 'Labels'},
+                {'headerName': 'Type', 'field': 'Classifier Type'},
+            ],
+            style={"height": '30vh', "width": '100%'},
+            columnSize="sizeToFit",
+            dashGridOptions={"rowSelection": 'multiple'}
+        )
+    ]),
+    dbc.ModalFooter([
+        dbc.ButtonGroup([
+            dbc.Button('Remove Event', id='remove_event', color='warning'),
+            dbc.Button('Fit Classifier', id='fitclassifier', color='success'),
+            dbc.Button('Save Classifier', id='savemodel', disabled=True, color='primary')
+        ])
+    ])
+], id='chooseevents_modal', size='xl', is_open=False)
+
+CONSOLE = dbc.Toast(
+    'console displayed here',
+    header="Console", dismissable=True,
+    id='console', is_open=False,
+    style={"position": "fixed", "bottom": 20, "right": 20, "width": 400, 'max-height': 600, 'overflow-y': 'auto'}
+)
 
 # - main layout -
 
@@ -196,8 +242,7 @@ ANALYZER_LAYOUT = dbc.Container([
             html.H1('Sound Analyzer')
         ], width=6),
         dbc.Col([
-            dbc.Button('Play Selection...', id='playsound'),
-            dcc.Store(id='abc123')
+            dbc.Button('Play Selection...', id='playsound')
         ], width=3),
         dbc.Col([
             dbc.Checklist(
@@ -225,37 +270,13 @@ ANALYZER_LAYOUT = dbc.Container([
             )
         ], width=9)
     ]),
-    dbc.Toast(
-        'console displayed here',
-        header="Console", dismissable=True,
-        id='console', is_open=False,
-        style={"position": "fixed", "bottom": 20, "right": 20, "width": 400, 'max-height': 600, 'overflow-y': 'auto'}
-    ),
-    dbc.Modal([
-        dbc.ModalHeader([html.H2('Choose Training Data')]),
-        dbc.ModalBody([
-            html.P('Choose events for model training data'),
-            AgGrid(
-                id='event_chooser_table',
-                rowData=None,
-                columnDefs=[
-                    {'headerName': 'Label', 'field': 'label', "checkboxSelection": True, "headerCheckboxSelection": True},
-                    {'headerName': 'Start', 'field': 'ts_min'},
-                    {'headerName': 'Duration (s)', 'field': 'duration'}
-                ],
-                style={"height": '70vh', "width": '100%'},
-                columnSize="sizeToFit",
-                dashGridOptions={"rowSelection": 'multiple'}
-            )
-        ]),
-        dbc.ModalFooter([
-            dbc.Button('Remove Event', id='remove_event'),
-            dbc.Button('Fit Classifier', id='fitclassifier')
-        ])
-    ], id='chooseevents_modal', size='l', is_open=False),
+    CONSOLE,
+    MODAL_CHOOSE_EVENTS,
     dcc.Store(id='soundprocess'),
     dcc.Store(id='path'),
     dcc.Store(id='events', data=[]),
     dcc.Store(id='classifiermodel'),
-    dcc.Store(id='graphtype')
+    dcc.Store(id='graphtype'),
+    dcc.Store(id='abc123'),
+    dcc.Store(id='model_index')
 ], fluid=True, id='main-layout')
