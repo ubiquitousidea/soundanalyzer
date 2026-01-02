@@ -72,7 +72,7 @@ LOAD_SOUND = dbc.AccordionItem([
         ])
     ]),
     dbc.Row([
-        dbc.Button('Load...', id='load_sound', style={'width':'100%'})
+        dbc.Button('Load...', id='load_sound', style={'width':'100%'}, disabled=True)
     ]),
     html.Div(id='datasummary')
 ], title='Load Sound...')
@@ -91,7 +91,7 @@ SPECTRAL_ANALYSIS = dbc.AccordionItem([
     ]),
     dbc.Row([
         dbc.Col([
-            dbc.Button('Run FFT...', id='runfft')
+            dbc.Button('Run FFT...', id='runfft', disabled=True)
         ]),
         dbc.Col([
             dbc.RadioItems(
@@ -101,9 +101,7 @@ SPECTRAL_ANALYSIS = dbc.AccordionItem([
             )
         ])
     ]),
-    dbc.Row([
-        dbc.Col([dbc.Button('Plot Spectrogram...', id='plotspectrogram')])
-    ]),
+
     dbc.Row([
         html.Div(id='fft_result_info')
     ])
@@ -116,7 +114,7 @@ DATA_LABELING = dbc.AccordionItem([
     ]),
     dbc.Row([
         dbc.Button('Load Events', id='load_events', color='primary'),
-        dbc.Button('Store Event', id='store_event')
+        dbc.Button('Store Event', id='store_event', disabled=True)
     ]),
     dbc.Row([DataTable(id='event_table', columns=EVENT_COLUMNS, row_selectable='single')])
 ], title='Data Labeling...')
@@ -127,17 +125,10 @@ DIMENSION_REDUCTION = dbc.AccordionItem([
         html.H4('Number of Dims'),
         dbc.Input(type="number", value=16, min=1, max=30, step=1, id='npc')
     ]),
-    dbc.Row([
-        html.H4('Component Number'),
-        dcc.Dropdown(
-            options=[{'label': f'PC {i + 1}', 'value': i} for i in range(16)],
-            value=1,
-            id='component_number'
-        )
-    ]),
+
     dbc.Row([
         dbc.Col([
-            dbc.Button('Run PCA...', id='runpca')
+            dbc.Button('Run PCA...', id='runpca', disabled=True)
         ]),
         dbc.Col([
             dbc.Checklist(
@@ -146,12 +137,7 @@ DIMENSION_REDUCTION = dbc.AccordionItem([
             )
         ]),
     ]),
-    dbc.Row([
-        dbc.Col([dbc.Button('Show Components...', id='showcomponents')]),
-        dbc.Col([dbc.Button('Plot 3D...', id='plot3d')]),
-        dbc.Col([dbc.Button('Matrix Plot...', id='matrix')]),
-        dbc.Col([dbc.Button('Show PC Timeseries...',id='pc_ts')]),
-    ]),
+
     dbc.Row([html.Div(id='pca_result_info')])
 ], title='Dimension Reduction...')
 
@@ -181,9 +167,7 @@ CLUSTERING = dbc.AccordionItem([
 
 FIT_CLASSIFIER = dbc.AccordionItem([
     dbc.Button('Start Modeling', id='chooseevents'),
-    dbc.Button('View Feature Importance', id='view_feature_importance', disabled=True),
 
-    dbc.Button('Show Predictions', id='showprediction', disabled=True),
 
 ], title='Classification Modeling')
 
@@ -234,13 +218,35 @@ CONSOLE = dbc.Toast(
     style={"position": "fixed", "bottom": 20, "right": 20, "width": 400, 'max-height': 600, 'overflow-y': 'auto'}
 )
 
+GRAPH_CONTROLS = dbc.Row([
+    dbc.Col([
+        dbc.ButtonGroup([
+            dbc.Button('Plot Spectrogram', id='plotspectrogram', disabled=True),
+            dbc.Button('Show PC Timeseries', id='pc_ts', disabled=True),
+            dbc.Button('Plot 3D', id='plot3d', disabled=True),
+            dbc.Button('Show Components', id='showcomponents', disabled=True),
+            dbc.Button('Matrix Plot', id='matrix', disabled=True),
+            dbc.Button('View Feature Importance', id='view_feature_importance', disabled=True),
+            dbc.Button('Show Predictions', id='showprediction', disabled=True)
+        ], style={'display':'flex', 'width': '100%'}, id='button-bar')
+    ], width=12)
+], style={'margin-top': '10px'})
+
 # - main layout -
 
 ANALYZER_LAYOUT = dbc.Container([
     dbc.Row([
         dbc.Col([
-            html.H1('Sound Analyzer')
-        ], width=6),
+            html.H1('Sound Analyzer', style={'white-space': 'nowrap'})
+        ], width=5),
+        dbc.Col([
+            dcc.Dropdown(
+                options=[{'label': f'PC {i + 1}', 'value': i} for i in range(16)],
+                value=1,
+                id='component_number',
+                style={'display': 'none'}
+            )
+        ], width=2),
         dbc.Col([
             dbc.Button('Play Selection...', id='playsound')
         ], width=3),
@@ -250,7 +256,7 @@ ANALYZER_LAYOUT = dbc.Container([
                 options=[{'label': 'Show Console', 'value': 'True'}], 
                 value=['True']
             )
-        ], width=3)
+        ], width=2)
     ]),
     dbc.Row([
         dbc.Col([
@@ -264,12 +270,18 @@ ANALYZER_LAYOUT = dbc.Container([
             ], id='navbar')
         ], width=3),
         dbc.Col([
-            dcc.Graph(
-                id='graph1', 
-                figure=go.Figure(layout=go.Layout(**FIGURE_LAYOUT_SETTINGS))
+            dcc.Loading(
+                dcc.Graph(
+                    id='graph1', 
+                    figure=go.Figure(layout=go.Layout(**FIGURE_LAYOUT_SETTINGS))
+                ),
+                color='#ffffff',
+                type='default',
+                className='graph-loading'
             )
         ], width=9)
     ]),
+    GRAPH_CONTROLS,
     CONSOLE,
     MODAL_CHOOSE_EVENTS,
     dcc.Store(id='soundprocess'),

@@ -433,5 +433,66 @@ def update_component_options(n_dims):
     return [{'label': f'PC {i + 1}', 'value': i} for i in range(int(n_dims)-2)]
 
 
+@callback(
+    Output('plotspectrogram', 'disabled'),
+    Output('pc_ts', 'disabled'),
+    Output('plot3d', 'disabled'),
+    Output('showcomponents', 'disabled'),
+    Output('matrix', 'disabled'),
+    Output('runpca', 'disabled'),
+    Input('soundprocess', 'data')
+)
+def enable_spectrogram_button(sp_data):
+    if not sp_data:
+        return True, True, True, True, True, True
+    try:
+        sp = pickle.loads(sp_data)
+        fft_disabled = sp.fft is None
+        pc_disabled = sp.pc_scores is None
+        return fft_disabled, pc_disabled, pc_disabled, pc_disabled, pc_disabled, fft_disabled
+    except:
+        return True, True, True, True, True, True
+
+
+@callback(
+    Output('load_sound', 'disabled'),
+    Input('filepicker', 'value')
+)
+def enable_load_button(filename):
+    if filename:
+        return False
+    return True
+
+
+@callback(
+    Output('runfft', 'disabled'),
+    Input('soundprocess', 'data')
+)
+def enable_fft_button(sp_data):
+    if sp_data:
+        return False
+    return True
+
+
+@callback(
+    Output('store_event', 'disabled'),
+    Input('graph1', 'selectedData')
+)
+def enable_store_event_button(selected_data):
+    if selected_data:
+        return False
+    return True
+
+
+@callback(
+    Output('component_number', 'style'),
+    Input('graphtype', 'data')
+)
+def toggle_component_dropdown(graph_type):
+    if graph_type == '3d':
+        return {'display': 'block'}
+    return {'display': 'none'}
+
+
 if __name__ == '__main__':
     app.run_server(debug=True)
