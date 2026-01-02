@@ -228,7 +228,7 @@ MODAL_CHOOSE_EVENTS = dbc.Modal([
 ], id='chooseevents_modal', size='xl', is_open=False)
 
 CONSOLE = dbc.Toast(
-    'console displayed here',
+    html.Pre(id='console_text'),
     header="Console", dismissable=True,
     id='console', is_open=False,
     style={"position": "fixed", "bottom": 20, "right": 20, "width": 400, 'max-height': 600, 'overflow-y': 'auto'}

@@ -365,7 +365,7 @@ def fill_cluster_table(sp_data):
 
 
 @callback(
-    Output('console', 'children'),
+    Output('console_text', 'children'),
     Output('console', 'is_open'),
     Input('graph1', 'clickData'),
     Input('graph1', 'selectedData'),
@@ -395,7 +395,7 @@ def show_console_data(cd, sd, rows, cell, showconsole):
                 raise PreventUpdate
     if data == 'null':
         raise PreventUpdate
-    output = html.Pre(data)
+    output = data
     return output, True
 
 
@@ -421,6 +421,16 @@ def update_models_table(model_data):
     }]
     
     return data
+
+
+@callback(
+    Output('component_number', 'options'),
+    Input('npc', 'value')
+)
+def update_component_options(n_dims):
+    if not n_dims:
+        raise PreventUpdate
+    return [{'label': f'PC {i + 1}', 'value': i} for i in range(int(n_dims)-2)]
 
 
 if __name__ == '__main__':
